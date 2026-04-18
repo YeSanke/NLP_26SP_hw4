@@ -71,7 +71,7 @@ class T5Dataset(Dataset):
 
         data = []
         for nl, sql in zip(nl_lines, sql_lines):
-            # ── Encoder ───────────────────────────────────────────────────────
+            # Encoder
             enc = tokenizer(
                 PREFIX + nl,
                 truncation=True,
@@ -81,7 +81,7 @@ class T5Dataset(Dataset):
             encoder_ids  = enc["input_ids"].squeeze(0)       # [T]
             encoder_mask = enc["attention_mask"].squeeze(0)  # [T]
 
-            # ── Decoder ───────────────────────────────────────────────────────
+            # Decoder
             bos = torch.tensor([self.bos_id], dtype=torch.long)
 
             if split != "test":
