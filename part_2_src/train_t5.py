@@ -86,12 +86,12 @@ def train(args, model, train_loader, dev_loader, optimizer, scheduler):
     os.makedirs('records', exist_ok=True)
 
     for epoch in range(args.max_n_epochs):
-        # ── Train ─────────────────────────────────────────────────────────────
+        # Train
         t0 = time.time()
         tr_loss = train_epoch(args, model, train_loader, optimizer, scheduler)
         train_time = time.time() - t0
 
-        # ── Decide whether to run generation this epoch ───────────────────────
+        # Decide whether to run generation this epoch
         last_epoch  = (epoch == args.max_n_epochs - 1)
         do_generate = (epoch % args.eval_generate_every == args.eval_generate_every - 1) or last_epoch
 
@@ -104,7 +104,7 @@ def train(args, model, train_loader, dev_loader, optimizer, scheduler):
         )
         eval_time = time.time() - t0
 
-        # ── Logging ───────────────────────────────────────────────────────────
+        # Logging
         if do_generate:
             print(f"Epoch {epoch} [train {train_time:.1f}s | eval {eval_time:.1f}s]: "
                   f"train_loss={tr_loss:.4f}, dev_loss={eval_loss:.4f}, "
@@ -130,7 +130,7 @@ def train(args, model, train_loader, dev_loader, optimizer, scheduler):
                 })
             wandb.log(log_dict, step=epoch)
 
-        # ── Checkpointing & early stopping ────────────────────────────────────
+        # Checkpointing & early stopping
         save_model(checkpoint_dir, model, best=False)
 
         if do_generate:
